@@ -1,30 +1,36 @@
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import susDocs from '../assets/report.json';
 
 const Table = () => {
-  const { id: susDoc } = useParams();
-  /* const [susDocs, setSusDocs] = useState({});
+  const { id: filenum } = useParams();
+
+  const [report, setReport] = useState({
+    filename: '',
+    true_sources: [],
+    potential_sources: [],
+    scores: [],
+  });
 
   useEffect(() => {
     requestSusDocs();
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   async function requestSusDocs() {
-    const res = await fetch('../assets/report.json');
+    const res = await fetch(
+      `/tfidf-reports/suspicious-document${filenum}.json`
+    );
     const json = await res.json();
-    setSusDocs(json);
-  } */
-  /* console.log(id);
-  const susDoc = Number.parseInt(id); */
+    setReport(json);
+  }
 
   return (
     <div className="mt-8 flex justify-center min-w-full">
       <div className="w-11/12 align-middle py-2 md:px-2 lg:px-8">
         <h1 className="text-2xl font-semibold text-gray-900">
-          {`Plagiarism Report for suspicious-document${susDoc.padStart(5, 0)}`}
+          {`Plagiarism Report for suspicious-document${filenum.padStart(5, 0)}`}
         </h1>
 
-        <div>{susDocs[susDoc]['true_sources'].join(', ')}</div>
+        <div>{report.true_sources.join(', ')}</div>
 
         <div className="mt-8 overflow-x-auto shadow ring-1 ring-black ring-opacity-5 rounded-lg">
           <table className="min-w-full divide-y divide-gray-300">
@@ -45,7 +51,7 @@ const Table = () => {
               </tr>
             </thead>
             <tbody className="bg-white">
-              {susDocs[susDoc]['detected'].map((filenum, idx) => (
+              {report.potential_sources.map((filenum, idx) => (
                 <tr
                   key={filenum}
                   className={idx % 2 === 0 ? undefined : 'bg-gray-50'}
@@ -55,8 +61,7 @@ const Table = () => {
                   </td>
                   <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-6">
                     {Math.round(
-                      (Number.parseFloat(susDocs[susDoc]['scores'][idx]) +
-                        Number.EPSILON) *
+                      (Number.parseFloat(report.scores[idx]) + Number.EPSILON) *
                         100
                     ) / 100}
                   </td>
