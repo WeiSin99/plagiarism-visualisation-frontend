@@ -5,7 +5,6 @@ import Chart from './Chart';
 
 const Report = () => {
   const { id: filenum } = useParams();
-
   const [report, setReport] = useState({});
 
   useEffect(() => {
