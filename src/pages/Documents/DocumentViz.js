@@ -9,7 +9,7 @@ import {
   forceManyBody,
 } from 'd3-force';
 
-const Chart = ({ report }) => {
+const DocumentViz = ({ report }) => {
   const containerRef = useRef(null);
   const [width, setWidth] = useState(0);
   const [animatedNodes, setAnimatedNodes] = useState([]);
@@ -56,8 +56,8 @@ const Chart = ({ report }) => {
       .force(
         'link',
         forceLink(links)
-          .id((d) => d.id)
-          .strength((d) => d.score)
+          .id(d => d.id)
+          .strength(d => d.score)
       )
       .force('center', forceCenter(width / 2, 250))
       .force('collide', forceCollide(11))
@@ -73,7 +73,7 @@ const Chart = ({ report }) => {
   return (
     <div ref={containerRef} className="w-full">
       <svg width="100%" height={500}>
-        {animatedNodes.map((node) => (
+        {animatedNodes.map(node => (
           <circle
             key={node.id}
             cx={node.x}
@@ -87,4 +87,4 @@ const Chart = ({ report }) => {
   );
 };
 
-export default Chart;
+export default DocumentViz;

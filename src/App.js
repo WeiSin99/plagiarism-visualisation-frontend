@@ -1,12 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Report from './components/Report';
+import Corpus from './pages/Corpora/Corpus';
+import Document from './pages/Documents/Document';
+import Sentence from './pages/Sentences/Sentence';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/:id" element={<Report />} />
+        <Route path="corpus/:id" element={<Corpus />} />
+        <Route path="document/:id" element={<Sentence />} />
+        <Route path="source-retrieval/:id" element={<Document />} />
       </Routes>
     </BrowserRouter>
   );
