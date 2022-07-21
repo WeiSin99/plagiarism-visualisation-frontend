@@ -1,7 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Table from './Table';
 import DocumentViz from './DocumentViz';
+
+import Table from '../../components/table/Table';
+import TableRow from '../../components/table/TableRow';
+import TableHead from '../../components/table/TableHead';
+import TableHeader from '../../components/table/TableHeader';
+import TableBody from '../../components/table/TableBody';
+import TableData from '../../components/table/TableData';
+
+const roundTwoDecimal = num => {
+  return Math.round((Number.parseFloat(num) + Number.EPSILON) * 100) / 100;
+};
 
 const Report = () => {
   const { id: filenum } = useParams();
@@ -27,7 +37,29 @@ const Report = () => {
       {!!Object.keys(report).length && (
         <>
           <DocumentViz report={report} />
-          <Table filenum={filenum} report={report} />
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeader className="w-3/4">
+                  Potential Plagiarism Source
+                </TableHeader>
+                <TableHeader>Similarity Score</TableHeader>
+              </TableRow>
+            </TableHead>
+
+            <TableBody striped={true}>
+              {report.potential_sources.map((sourceFilenum, idx) => (
+                <TableRow key={sourceFilenum}>
+                  <TableData className="w-3/4">
+                    {`source-document${sourceFilenum
+                      .toString()
+                      .padStart(5, 0)}`}
+                  </TableData>
+                  <TableData>{roundTwoDecimal(report.scores[idx])}</TableData>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </>
       )}
     </div>
