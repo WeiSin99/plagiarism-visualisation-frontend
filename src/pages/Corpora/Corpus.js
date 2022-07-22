@@ -9,8 +9,11 @@ import TableHeader from '../../components/table/TableHeader';
 import TableBody from '../../components/table/TableBody';
 import TableData from '../../components/table/TableData';
 
+import Dropdown from '../../components/dropdown/Dropdown';
+
 const Corpus = () => {
   const { id: filenum } = useParams();
+  const [filter, setFilter] = useState('All');
   const [report, setReport] = useState({});
 
   useEffect(() => {
@@ -25,9 +28,14 @@ const Corpus = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-8">
+      <Dropdown
+        selectedItem={filter}
+        clickHandler={setFilter}
+        dropdownItems={['All', 'Linked Documents']}
+      />
       {!!Object.keys(report).length && (
         <>
-          <CorpusViz report={report} />
+          <CorpusViz report={report} filter={filter} />
           <Table>
             <TableHead>
               <TableRow>
