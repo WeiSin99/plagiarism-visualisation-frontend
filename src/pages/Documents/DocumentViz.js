@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { scaleSequential } from 'd3-scale';
 import { interpolateRdYlBu } from 'd3-scale-chromatic';
 import {
@@ -9,26 +9,11 @@ import {
   forceManyBody,
 } from 'd3-force';
 
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
+
 const DocumentViz = ({ report }) => {
-  const containerRef = useRef(null);
-  const [width, setWidth] = useState(0);
+  const [containerRef, width] = useResponsiveWidth();
   const [animatedNodes, setAnimatedNodes] = useState([]);
-
-  // set width on resizing
-  useEffect(() => {
-    setWidth(containerRef.current.clientWidth);
-
-    let timeoutId;
-    const resizeListener = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setWidth(containerRef.current.clientWidth);
-      }, 300);
-    };
-    window.addEventListener('resize', resizeListener);
-
-    return () => window.removeEventListener('resize', resizeListener);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // force simulation
   useEffect(() => {

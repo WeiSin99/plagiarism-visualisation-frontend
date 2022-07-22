@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { extent, min } from 'd3-array';
 import { scaleLinear, scaleSequential } from 'd3-scale';
 import { interpolateOrRd } from 'd3-scale-chromatic';
@@ -8,31 +8,16 @@ import {
   forceCenter,
   forceManyBody,
 } from 'd3-force';
+
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import CompareView from './CompareView';
 
 const height = 500;
 
 const SentenceViz = ({ report }) => {
-  const containerRef = useRef(null);
-  const [width, setWidth] = useState(0);
   const [animatedNodes, setAnimatedNodes] = useState([]);
   const [selectedCase, setSelectedCase] = useState(0);
-
-  // set width on resizing
-  useEffect(() => {
-    setWidth(containerRef.current.clientWidth);
-
-    let timeoutId;
-    const resizeListener = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setWidth(containerRef.current.clientWidth);
-      }, 300);
-    };
-    window.addEventListener('resize', resizeListener);
-
-    return () => window.removeEventListener('resize', resizeListener);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const [containerRef, width] = useResponsiveWidth();
 
   useEffect(() => {
     const radiusExtent = extent(
