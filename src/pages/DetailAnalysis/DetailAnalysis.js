@@ -41,6 +41,10 @@ const DetailAnalysis = () => {
 
   return (
     <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-8">
+      <h1 className="text-3xl font-semibold text-gray-900">
+        {plagReport.title}
+      </h1>
+      <p className="text-base mt-2 text-gray-600">{plagReport.authors}</p>
       <DetailAnalysisViz plagReport={plagReport} setCaseNum={setCaseNum} />
       <CompareView
         susDoc={filenum}
