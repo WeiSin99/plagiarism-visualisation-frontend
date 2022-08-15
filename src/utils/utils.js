@@ -1,3 +1,14 @@
+const plagiarisedPartBgColor = (plagReport, caseNum, sentence) => {
+  if (!Object.keys(plagReport).length) return;
+  if (sentence.case != null && Number.parseInt(sentence.case) === caseNum) {
+    return 'rgba(225, 29, 72, 0.35)';
+  } else if (sentence.case != null) {
+    return 'rgba(249, 115, 22, 0.35)';
+  } else {
+    return '';
+  }
+};
+
 const plagiarisedColor = score => {
   if (score > 0.3) {
     return 'text-red-500';
@@ -14,4 +25,4 @@ const roundTwoDecimal = num => {
   return Math.round((Number.parseFloat(num) + Number.EPSILON) * 100) / 100;
 };
 
-export { plagiarisedColor, roundTwoDecimal };
+export { plagiarisedColor, roundTwoDecimal, plagiarisedPartBgColor };

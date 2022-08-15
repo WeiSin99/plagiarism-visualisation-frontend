@@ -1,20 +1,5 @@
 import { useState, useEffect } from 'react';
-
-const plagiarisedPartBgColor = (plagReport, caseNum, sentence) => {
-  if (!Object.keys(plagReport).length) return;
-  // const showingSouceDoc = plagReport.detectedCases[caseNum].filenum;
-  if (
-    sentence.case != null &&
-    sentence.case === caseNum
-    // Number.parseInt(sentence.source) === showingSouceDoc
-  ) {
-    return 'rgba(225, 29, 72, 0.35)';
-  } else if (sentence.case != null) {
-    return 'rgba(249, 115, 22, 0.35)';
-  } else {
-    return '';
-  }
-};
+import { plagiarisedPartBgColor } from '../../utils/utils';
 
 const SuspiciousDocumentView = ({
   filenum,
