@@ -67,7 +67,7 @@ const CorpusViz = ({ report, filter }) => {
             source: result.id,
             target: s,
             color: '#ccc',
-            strokeWidth: 4,
+            strokeWidth: 2,
           };
         });
       })
@@ -98,7 +98,7 @@ const CorpusViz = ({ report, filter }) => {
     );
     connectedLinks.forEach(link => {
       link.color = 'rgb(255, 120, 72)';
-      link.strokeWidth = 4;
+      link.strokeWidth = 2;
     });
     setAnimatedLinks([...animatedLinks]);
     setTooltipStyle({ left: e.pageX + 8, top: e.pageY - 40, opacity: 0.8 });
@@ -111,7 +111,7 @@ const CorpusViz = ({ report, filter }) => {
 
     animatedLinks.forEach(link => {
       link.color = '#ccc';
-      link.strokeWidth = 4;
+      link.strokeWidth = 2;
     });
     setAnimatedLinks([...animatedLinks]);
     setTooltipStyle({ left: 0, top: 0, opacity: 0 });
