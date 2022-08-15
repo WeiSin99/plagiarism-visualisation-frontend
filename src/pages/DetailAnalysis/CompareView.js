@@ -5,21 +5,21 @@ const CompareView = ({
   susDoc,
   caseNum,
   plagReport,
-  sourceDetail,
-  setSourceDetail,
+  sourceFilenum,
+  setCaseNum,
 }) => {
   return (
-    <div className="grid grid-cols-2 gap-12">
+    <div className="grid grid-cols-2 gap-12 mt-10">
       <SuspiciousDocumentView
         filenum={susDoc}
         plagReport={plagReport}
         caseNum={caseNum}
-        setSourceDetail={setSourceDetail}
+        setCaseNum={setCaseNum}
       />
       <SourceDocumentView
-        filenum={sourceDetail.filenum}
-        allPlagParts={sourceDetail.allPlagParts}
-        selectedCase={sourceDetail.selectedCase}
+        filenum={sourceFilenum}
+        plagReport={plagReport}
+        caseNum={caseNum}
       />
     </div>
   );

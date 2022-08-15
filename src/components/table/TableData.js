@@ -1,7 +1,8 @@
-const TableData = ({ children, className }) => {
+const TableData = ({ children, className, id }) => {
   return (
     <td
-      className={`whitespace-nowrap py-4 text-sm font-medium text-gray-900 ${className}`}
+      id={id}
+      className={`whitespace-nowrap py-4 text-sm font-medium ${className}`}
     >
       {children}
     </td>

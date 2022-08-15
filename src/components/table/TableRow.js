@@ -1,9 +1,9 @@
 import React from 'react';
-const TableRow = ({ children, className }) => {
+const TableRow = ({ children, className, id }) => {
   const numOfElement = children.length;
 
   return (
-    <tr className={`${className}`}>
+    <tr id={id} className={`${className}`}>
       {React.Children.map(children, (cell, i) => {
         // set different padding for left and right most cell
         let padding = 'px-3';

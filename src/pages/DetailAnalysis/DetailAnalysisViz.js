@@ -23,7 +23,7 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
       const radiusScale = scaleLinear().domain(radiusExtent).range([10, 100]);
 
       const allScores = plagReport.detectedCases.flatMap(c => {
-        return c.sources[0].averageScore;
+        return c.averageScore;
       });
       const minScore = min(allScores);
       const colorScale = scaleSequential()
@@ -34,7 +34,7 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
         return {
           id: idx,
           r: radiusScale(c.thisLength),
-          color: colorScale(c.sources[0].averageScore),
+          color: colorScale(c.averageScore),
         };
       });
 
