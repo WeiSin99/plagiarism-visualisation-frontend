@@ -41,7 +41,7 @@ const Corpus = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableHeader className="w-3/4">Document</TableHeader>
+                <TableHeader className="w-3/5">Document</TableHeader>
                 <TableHeader className="w-1/5">Authors</TableHeader>
                 <TableHeader className="w-1/5">Plagiarism Score</TableHeader>
               </TableRow>
