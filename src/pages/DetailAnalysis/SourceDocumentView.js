@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react';
 
-const SourceDocumentView = ({ filenum, allPlagParts, selectedCase }) => {
+const plagiarisedPartBgColor = (plagReport, caseNum, sentence) => {
+  if (!Object.keys(plagReport).length) return;
+  if (sentence.case != null && Number.parseInt(sentence.case) === caseNum) {
+    return 'rgba(225, 29, 72, 0.35)';
+  } else if (sentence.case != null) {
+    return 'rgba(249, 115, 22, 0.35)';
+  } else {
+    return '';
+  }
+};
+
+const SourceDocumentView = ({ filenum, plagReport, caseNum }) => {
   const [doc, setDoc] = useState({});
   const [paragraphs, setParagraphs] = useState([]);
 
@@ -20,29 +31,35 @@ const SourceDocumentView = ({ filenum, allPlagParts, selectedCase }) => {
   }, [filenum]); //eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (!!allPlagParts && !!Object.keys(doc).length) {
-      const plagiarisedParts = allPlagParts.map(plagCase => {
-        const firstSentence = plagCase.sourceStart;
-        const lastSentence = plagCase.sourceEnd;
-        const numOfSentenes = lastSentence - firstSentence + 1;
+    if (!!Object.keys(plagReport).length && !!Object.keys(doc).length) {
+      const plagiarisedParts = [];
+      plagReport.detectedCases.forEach((plagCase, i) => {
+        if (plagCase.filenum === filenum) {
+          const firstSentence = plagCase.sourceStart;
+          const lastSentence = plagCase.sourceEnd;
+          const numOfSentenes = lastSentence - firstSentence + 1;
 
-        return Array.from(
-          { length: numOfSentenes },
-          (_, idx) => firstSentence + idx
-        );
+          plagiarisedParts.push({
+            [i]: Array.from(
+              { length: numOfSentenes },
+              (_, idx) => firstSentence + idx
+            ),
+          });
+        }
       });
 
-      const processedParagraphs = doc.processedParagraphs.map(paragraph => {
-        return paragraph.map(sentence => {
-          const caseNum = plagiarisedParts.findIndex(part => {
-            return part.includes(sentence.number);
-          });
-          if (caseNum >= 0) {
-            return { ...sentence, case: caseNum };
-          } else {
-            return sentence;
-          }
+      const processedParagraphs = doc.sentences.map(sentence => {
+        const caseNum2 = plagiarisedParts.findIndex(part => {
+          return Object.values(part)[0].includes(sentence.number);
         });
+        if (caseNum2 >= 0) {
+          return {
+            ...sentence,
+            case: Object.keys(plagiarisedParts[caseNum2])[0],
+          };
+        } else {
+          return sentence;
+        }
       });
       setParagraphs(processedParagraphs);
     }
@@ -50,42 +67,38 @@ const SourceDocumentView = ({ filenum, allPlagParts, selectedCase }) => {
 
   useEffect(() => {
     if (paragraphs.length) {
+      const startSentence = plagReport.detectedCases[caseNum].sourceStart;
       document
-        .querySelector(`#source-doc-${filenum} .sentence-${selectedCase}`)
+        .querySelector(`#source-doc-${filenum} .sentence-${startSentence}`)
         ?.scrollIntoView({ behavior: 'smooth' });
     }
   });
 
   return (
-    <section
-      id={`source-doc-${filenum}`}
-      className="col-span-1 overflow-y-scroll h-[55rem]"
-    >
+    <section id={`source-doc-${filenum}`} className="col-span-1 ">
       {!!Object.keys(doc).length ? (
         <>
-          <h1 className="text-2xl font-semibold text-gray-900 mb-5">
+          <h1 className="text-2xl font-semibold text-gray-900 mb-5 overflow-x-scroll whitespace-nowrap">
             {doc.title}
           </h1>
-          <div className="prose prose-slate prose-lg max-w-full">
-            {paragraphs?.map((paragraph, i) => (
-              <p key={i}>
-                {paragraph.map((sentence, j) => (
-                  <span
-                    key={j}
-                    className={`sentence-${sentence.number} ${
-                      sentence.case != null ? 'cursor-pointer' : ''
-                    }`}
-                    style={{
-                      backgroundColor: `${
-                        sentence.case != null ? 'rgba(249, 115, 22, 0.35)' : ''
-                      }`,
-                    }}
-                  >
-                    {sentence.rawText}{' '}
-                  </span>
-                ))}
-              </p>
-            ))}
+          <div className="prose prose-slate prose-lg max-w-full overflow-y-scroll h-[55rem]">
+            <p className="whitespace-pre-line">
+              {paragraphs.map((sentence, j) => (
+                <span
+                  key={j}
+                  className={`sentence-${sentence.number}`}
+                  style={{
+                    backgroundColor: `${plagiarisedPartBgColor(
+                      plagReport,
+                      caseNum,
+                      sentence
+                    )}`,
+                  }}
+                >
+                  {sentence.rawText.replace(/(?<!\n)\n(?!\n)/g, ' ')}{' '}
+                </span>
+              ))}
+            </p>
           </div>
         </>
       ) : (

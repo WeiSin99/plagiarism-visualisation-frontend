@@ -1,10 +1,26 @@
 import { useState, useEffect } from 'react';
 
+const plagiarisedPartBgColor = (plagReport, caseNum, sentence) => {
+  if (!Object.keys(plagReport).length) return;
+  // const showingSouceDoc = plagReport.detectedCases[caseNum].filenum;
+  if (
+    sentence.case != null &&
+    sentence.case === caseNum
+    // Number.parseInt(sentence.source) === showingSouceDoc
+  ) {
+    return 'rgba(225, 29, 72, 0.35)';
+  } else if (sentence.case != null) {
+    return 'rgba(249, 115, 22, 0.35)';
+  } else {
+    return '';
+  }
+};
+
 const SuspiciousDocumentView = ({
   filenum,
   plagReport,
   caseNum,
-  setSourceDetail,
+  setCaseNum,
 }) => {
   const [doc, setDoc] = useState({});
   const [paragraphs, setParagraphs] = useState([]);
@@ -34,17 +50,15 @@ const SuspiciousDocumentView = ({
         );
       });
 
-      const processedParagraphs = doc.processedParagraphs.map(paragraph => {
-        return paragraph.map(sentence => {
-          const caseNum = plagiarisedParts.findIndex(part => {
-            return part.includes(sentence.number);
-          });
-          if (caseNum >= 0) {
-            return { ...sentence, case: caseNum };
-          } else {
-            return sentence;
-          }
+      const processedParagraphs = doc.sentences.map(sentence => {
+        const caseNum2 = plagiarisedParts.findIndex(part => {
+          return part.includes(sentence.number);
         });
+        if (caseNum2 >= 0) {
+          return { ...sentence, case: caseNum2 };
+        } else {
+          return sentence;
+        }
       });
       setParagraphs(processedParagraphs);
     }
@@ -61,53 +75,38 @@ const SuspiciousDocumentView = ({
 
   const clickHandler = plagiarisedCase => {
     if (plagiarisedCase != null) {
-      const selectedCase = plagReport.detectedCases[plagiarisedCase];
-      const filenum = selectedCase.sources[0].filenum;
-      const startSentence = selectedCase.sources[0].sourceStart;
-      const sourcePlagParts = plagReport.detectedCases.flatMap(detectedCase => {
-        return detectedCase.sources.filter(
-          source => source.filenum === filenum
-        );
-      });
-      setSourceDetail({
-        filenum: filenum,
-        selectedCase: startSentence,
-        allPlagParts: sourcePlagParts,
-      });
+      setCaseNum(plagiarisedCase);
     }
   };
 
   return (
-    <section
-      id={`suspicious-doc-${filenum}`}
-      className="col-span-1 overflow-y-scroll h-[55rem]"
-    >
+    <section id={`suspicious-doc-${filenum}`} className="col-span-1  ">
       {!!Object.keys(doc).length ? (
         <>
-          <h1 className="text-2xl font-semibold text-gray-900 mb-5">
+          <h1 className="text-2xl font-semibold text-gray-900 mb-5 overflow-x-scroll whitespace-nowrap">
             {doc.title}
           </h1>
-          <div className="prose prose-slate prose-lg max-w-full">
-            {paragraphs?.map((paragraph, i) => (
-              <p key={i}>
-                {paragraph.map((sentence, j) => (
-                  <span
-                    key={j}
-                    className={`sentence-${sentence.number} ${
-                      sentence.case != null ? 'cursor-pointer' : ''
-                    }`}
-                    style={{
-                      backgroundColor: `${
-                        sentence.case != null ? 'rgba(249, 115, 22, 0.35)' : ''
-                      }`,
-                    }}
-                    onClick={() => clickHandler(sentence.case)}
-                  >
-                    {sentence.rawText}{' '}
-                  </span>
-                ))}
-              </p>
-            ))}
+          <div className="prose prose-slate prose-lg max-w-full overflow-y-scroll h-[55rem]">
+            <p className="whitespace-pre-line">
+              {paragraphs.map((sentence, i) => (
+                <span
+                  key={i}
+                  className={`sentence-${sentence.number} ${
+                    sentence.case != null ? 'cursor-pointer' : ''
+                  }`}
+                  style={{
+                    backgroundColor: `${plagiarisedPartBgColor(
+                      plagReport,
+                      caseNum,
+                      sentence
+                    )}`,
+                  }}
+                  onClick={() => clickHandler(sentence.case)}
+                >
+                  {sentence.rawText.replace(/(?<!\n)\n(?!\n)/g, ' ')}{' '}
+                </span>
+              ))}
+            </p>
           </div>
         </>
       ) : (

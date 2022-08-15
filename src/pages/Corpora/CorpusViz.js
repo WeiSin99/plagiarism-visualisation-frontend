@@ -17,9 +17,10 @@ const forceGraph = (nodes, links, width, height, charge) => {
       'link',
       forceLink(links)
         .id(d => d.id)
-        .strength(d => d.score / 10)
+        .strength(1)
+        .distance(20)
     )
-    .force('center', forceCenter(width / 2, height / 2))
+    .force('center', forceCenter(width / 2, height / 2).strength(1))
     .force(
       'collide',
       forceCollide().radius(d => d.r + 1)
@@ -50,23 +51,23 @@ const CorpusViz = ({ report, filter }) => {
   });
 
   useEffect(() => {
-    let nodes = Object.entries(report).map(([docNum, result]) => {
+    let nodes = report.response.map(result => {
       return {
-        id: docNum,
-        r: 10 + result.source.length,
+        id: result.id,
+        title: result.title,
+        r: 10 + result.sources.length,
       };
     });
 
-    const links = Object.entries(report)
-      .map(([docNum, result]) => {
-        if (!result.source.length) return undefined;
-        return result.source.map((s, i) => {
+    const links = report.response
+      .map(result => {
+        if (!result.sources.length) return undefined;
+        return result.sources.map(s => {
           return {
-            source: docNum,
-            target: s.toString(),
-            score: result.scores[i],
+            source: result.id,
+            target: s,
             color: '#ccc',
-            strokeWidth: 1,
+            strokeWidth: 4,
           };
         });
       })
@@ -76,7 +77,7 @@ const CorpusViz = ({ report, filter }) => {
     let strength = -6;
     if (filter !== 'All') {
       nodes = getLinkedNodes(nodes, links);
-      strength = -100;
+      strength = -15;
     }
 
     const simulation = forceGraph(nodes, links, width, height, strength);
@@ -97,11 +98,11 @@ const CorpusViz = ({ report, filter }) => {
     );
     connectedLinks.forEach(link => {
       link.color = 'rgb(255, 120, 72)';
-      link.strokeWidth = 2;
+      link.strokeWidth = 4;
     });
     setAnimatedLinks([...animatedLinks]);
     setTooltipStyle({ left: e.pageX + 8, top: e.pageY - 40, opacity: 0.8 });
-    setTooltipText(`suspicious-document${id}`);
+    setTooltipText(e.target.dataset.title);
   };
 
   const mouseLeaveNode = e => {
@@ -110,17 +111,22 @@ const CorpusViz = ({ report, filter }) => {
 
     animatedLinks.forEach(link => {
       link.color = '#ccc';
-      link.strokeWidth = 1;
+      link.strokeWidth = 4;
     });
     setAnimatedLinks([...animatedLinks]);
     setTooltipStyle({ left: 0, top: 0, opacity: 0 });
     setTooltipText('');
   };
 
+  const mouseClick = e => {
+    const id = e.target.dataset.id;
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <>
       <div
-        className="absolute bg-blue-200 text-center text-sm rounded-lg p-2"
+        className="absolute bg-blue-200 text-center text-sm font-semibold rounded-lg p-2"
         style={tooltipStyle}
       >
         {tooltipText}
@@ -129,14 +135,17 @@ const CorpusViz = ({ report, filter }) => {
         <svg width="100%" height={height}>
           {animatedNodes.map(node => (
             <circle
+              className="cursor-pointer"
               onMouseEnter={mouseEnterNode}
               onMouseLeave={mouseLeaveNode}
+              onClick={mouseClick}
               key={node.id}
               cx={node.x}
               cy={node.y}
               r={node.r}
               fill={node.color}
               data-fill={node.color}
+              data-title={node.title}
               data-id={node.id}
             ></circle>
           ))}
