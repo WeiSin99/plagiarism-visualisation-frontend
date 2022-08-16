@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { plagiarisedPartBgColor } from '../../utils/utils';
 
-const SourceDocumentView = ({ filenum, plagReport, caseNum }) => {
+const SourceDocumentView = ({ docType, filenum, plagReport, caseNum }) => {
   const [doc, setDoc] = useState({});
   const [paragraphs, setParagraphs] = useState([]);
 
   async function requestSourceDoc() {
     if (!filenum) return;
 
+    const requestType = docType === 'source' ? 'suspicious' : 'source';
     const res = await fetch(
-      `http://127.0.0.1:8000/api/source-document/${filenum}`
+      `http://127.0.0.1:8000/api/${requestType}-document/${filenum}`
     );
     const json = await res.json();
     setDoc(json);
@@ -22,30 +23,31 @@ const SourceDocumentView = ({ filenum, plagReport, caseNum }) => {
 
   useEffect(() => {
     if (!!Object.keys(plagReport).length && !!Object.keys(doc).length) {
-      const plagiarisedParts = [];
+      const plagiarisedParts = {};
       plagReport.detectedCases.forEach((plagCase, i) => {
         if (plagCase.filenum === filenum) {
           const firstSentence = plagCase.sourceStart;
           const lastSentence = plagCase.sourceEnd;
           const numOfSentenes = lastSentence - firstSentence + 1;
 
-          plagiarisedParts.push({
-            [i]: Array.from(
-              { length: numOfSentenes },
-              (_, idx) => firstSentence + idx
-            ),
-          });
+          plagiarisedParts[i] = Array.from(
+            { length: numOfSentenes },
+            (_, idx) => firstSentence + idx
+          );
         }
       });
 
       const processedParagraphs = doc.sentences.map(sentence => {
-        const caseNum2 = plagiarisedParts.findIndex(part => {
-          return Object.values(part)[0].includes(sentence.number);
+        let caseNum2 = -1;
+        Object.entries(plagiarisedParts).forEach(([num, part]) => {
+          if (part.includes(sentence.number)) {
+            caseNum2 = Number.parseInt(num);
+          }
         });
         if (caseNum2 >= 0) {
           return {
             ...sentence,
-            case: Object.keys(plagiarisedParts[caseNum2])[0],
+            case: caseNum2,
           };
         } else {
           return sentence;

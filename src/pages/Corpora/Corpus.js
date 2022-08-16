@@ -51,19 +51,15 @@ const Corpus = () => {
               {report.response.map(result => (
                 <TableRow id={result.id} key={result.id}>
                   <TableData className="w-3/5">
-                    {result.id.startsWith('source') ? (
-                      result.title.length > 75 ? (
-                        result.title.slice(0, 75) + '...'
-                      ) : (
-                        result.title
-                      )
-                    ) : (
-                      <Link to={`/document/${result.id.split('-')[1]}`}>
-                        {result.title.length > 75
-                          ? result.title.slice(0, 75) + '...'
-                          : result.title}
-                      </Link>
-                    )}
+                    <Link
+                      to={`/document/${
+                        result.id.split('-')[0] == 'suspicious' ? 'u' : 's'
+                      }${result.id.split('-')[1]}`}
+                    >
+                      {result.title.length > 75
+                        ? result.title.slice(0, 75) + '...'
+                        : result.title}
+                    </Link>
                   </TableData>
                   <TableData className="w-1/5">
                     {result.authors ?? '-'}
