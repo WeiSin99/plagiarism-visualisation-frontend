@@ -1,9 +1,18 @@
 const plagiarisedPartBgColor = (plagReport, caseNum, sentence) => {
   if (!Object.keys(plagReport).length) return;
-  if (sentence.case != null && Number.parseInt(sentence.case) === caseNum) {
-    return 'rgba(225, 29, 72, 0.35)';
-  } else if (sentence.case != null) {
-    return 'rgba(249, 115, 22, 0.35)';
+
+  if (sentence.case.includes(caseNum)) {
+    if (sentence.case.length > 1) {
+      return 'rgba(147, 51, 234, 0.35)';
+    } else {
+      return 'rgba(225, 29, 72, 0.35)';
+    }
+  } else if (sentence.case.length > 0) {
+    if (sentence.case.length > 1) {
+      return 'rgba(37, 99, 235, 0.35)';
+    } else {
+      return 'rgba(249, 115, 22, 0.35)';
+    }
   } else {
     return '';
   }

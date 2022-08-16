@@ -37,15 +37,15 @@ const SuspiciousDocumentView = ({
         );
       });
 
+      // need to account for overlapped part
       const processedParagraphs = doc.sentences.map(sentence => {
-        const caseNum2 = plagiarisedParts.findIndex(part => {
-          return part.includes(sentence.number);
+        const caseNums2 = [];
+        plagiarisedParts.forEach((part, idx) => {
+          if (part.includes(sentence.number)) {
+            caseNums2.push(idx);
+          }
         });
-        if (caseNum2 >= 0) {
-          return { ...sentence, case: caseNum2 };
-        } else {
-          return sentence;
-        }
+        return { ...sentence, case: caseNums2 };
       });
       setParagraphs(processedParagraphs);
     }
@@ -79,7 +79,7 @@ const SuspiciousDocumentView = ({
                 <span
                   key={i}
                   className={`sentence-${sentence.number} ${
-                    sentence.case != null ? 'cursor-pointer' : ''
+                    sentence.case.length > 0 ? 'cursor-pointer' : ''
                   }`}
                   style={{
                     backgroundColor: `${plagiarisedPartBgColor(
@@ -88,7 +88,7 @@ const SuspiciousDocumentView = ({
                       sentence
                     )}`,
                   }}
-                  onClick={() => clickHandler(sentence.case)}
+                  onClick={() => clickHandler(sentence.case[0])}
                 >
                   {sentence.rawText.replace(/(?<!\n)\n(?!\n)/g, ' ')}{' '}
                 </span>

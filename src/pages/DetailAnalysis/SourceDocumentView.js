@@ -38,20 +38,16 @@ const SourceDocumentView = ({ docType, filenum, plagReport, caseNum }) => {
       });
 
       const processedParagraphs = doc.sentences.map(sentence => {
-        let caseNum2 = -1;
+        let caseNums2 = [];
         Object.entries(plagiarisedParts).forEach(([num, part]) => {
           if (part.includes(sentence.number)) {
-            caseNum2 = Number.parseInt(num);
+            caseNums2.push(Number.parseInt(num));
           }
         });
-        if (caseNum2 >= 0) {
-          return {
-            ...sentence,
-            case: caseNum2,
-          };
-        } else {
-          return sentence;
-        }
+        return {
+          ...sentence,
+          case: caseNums2,
+        };
       });
       setParagraphs(processedParagraphs);
     }
