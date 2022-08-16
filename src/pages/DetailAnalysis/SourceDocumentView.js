@@ -58,7 +58,7 @@ const SourceDocumentView = ({ docType, filenum, plagReport, caseNum }) => {
   }, [doc]); //eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (paragraphs.length) {
+    if (paragraphs.length && caseNum >= 0) {
       const startSentence = plagReport.detectedCases[caseNum].sourceStart;
       document
         .querySelector(`#source-doc-${filenum} .sentence-${startSentence}`)
