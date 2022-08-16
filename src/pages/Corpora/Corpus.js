@@ -14,7 +14,7 @@ import Dropdown from '../../components/dropdown/Dropdown';
 import { plagiarisedColor, roundTwoDecimal } from '../../utils/utils';
 
 const Corpus = () => {
-  const { id: corpus_num } = useParams();
+  const { id: corpusNum } = useParams();
   const [filter, setFilter] = useState('All');
   const [report, setReport] = useState({});
 
@@ -23,7 +23,7 @@ const Corpus = () => {
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   async function requestCorpus() {
-    const res = await fetch(`http://127.0.0.1:8000/api/corpus/${corpus_num}`);
+    const res = await fetch(`http://127.0.0.1:8000/api/corpus/${corpusNum}`);
     const json = await res.json();
     setReport(json);
   }
@@ -53,8 +53,8 @@ const Corpus = () => {
                   <TableData className="w-3/5">
                     <Link
                       to={`/document/${
-                        result.id.split('-')[0] == 'suspicious' ? 'u' : 's'
-                      }${result.id.split('-')[1]}`}
+                        result.id.split('-')[0] === 'suspicious' ? 'u' : 's'
+                      }${result.id.split('-')[1]}-${corpusNum}`}
                     >
                       {result.title.length > 75
                         ? result.title.slice(0, 75) + '...'
