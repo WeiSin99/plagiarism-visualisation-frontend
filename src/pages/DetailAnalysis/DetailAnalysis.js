@@ -10,8 +10,9 @@ const DetailAnalysis = () => {
   const [caseNum, setCaseNum] = useState(-1);
   const [sourceFilenum, setSourceFilenum] = useState(null);
 
-  const docType = docId[0] === 's' ? 'source' : 'suspicious';
-  const filenum = docId.slice(1);
+  const [docDetail, corpusNum] = docId.split('-');
+  const docType = docDetail[0] === 's' ? 'source' : 'suspicious';
+  const filenum = docDetail.slice(1);
 
   async function requestPlagReport() {
     const res = await fetch(
@@ -54,7 +55,11 @@ const DetailAnalysis = () => {
           />
         </div>
         <div className="col-span-1">
-          <PlagiarismSourcesViz plagReport={plagReport} />
+          <PlagiarismSourcesViz
+            docType={docType}
+            plagReport={plagReport}
+            corpusNum={corpusNum}
+          />
         </div>
       </div>
     </div>

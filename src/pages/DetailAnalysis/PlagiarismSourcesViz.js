@@ -1,6 +1,33 @@
+import { useEffect, useState } from 'react';
 import { plagiarisedColor, roundTwoDecimal } from '../../utils/utils';
 
-const PlagiarismSourcesViz = ({ plagReport }) => {
+// underline source if the source is in the same corpus
+const underlineSource = (corpus, docType, sourceFilenum) => {
+  if (Object.keys(corpus).length === 0) return;
+  const sourceType = docType === 'source' ? 'suspicious' : 'source';
+  const sourceInCorpus = corpus.response.find(doc => {
+    return doc.id === `${sourceType}-${sourceFilenum}`;
+  });
+
+  if (sourceInCorpus) return 'underline decoration-2';
+  else return '';
+};
+
+const PlagiarismSourcesViz = ({ docType, plagReport, corpusNum }) => {
+  const [selectedSource, setSelectedSource] = useState(0);
+  const [corpus, setCorpus] = useState({});
+
+  async function requestCorpus() {
+    if (!corpusNum) return;
+    const res = await fetch(`http://127.0.0.1:8000/api/corpus/${corpusNum}`);
+    const json = await res.json();
+    setCorpus(json);
+  }
+
+  useEffect(() => {
+    requestCorpus();
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
+
   const clickHandler = sourceFilenum => {
     const allFileCases = [];
     plagReport.detectedCases.forEach((plagCase, idx) => {
@@ -19,6 +46,7 @@ const PlagiarismSourcesViz = ({ plagReport }) => {
       node.setAttribute('stroke', 'black');
       node.setAttribute('stroke-width', 2);
     });
+    setSelectedSource(sourceFilenum);
   };
 
   return (
@@ -28,10 +56,20 @@ const PlagiarismSourcesViz = ({ plagReport }) => {
         plagReport.detectedSources.map(source => (
           <div
             key={source.filenum}
-            className="flex flex-row justify-between bg-white p-2 rounded-lg mt-3 cursor-pointer hover:scale-105"
+            className={`flex flex-row justify-between bg-white p-2 rounded-lg mt-3 cursor-pointer hover:scale-105 ${
+              selectedSource === source.filenum ? 'border-2 border-black' : ''
+            }`}
             onClick={() => clickHandler(source.filenum)}
           >
-            <p className="truncate mr-3">{source.title}</p>
+            <p
+              className={`truncate mr-3 ${underlineSource(
+                corpus,
+                docType,
+                source.filenum
+              )}`}
+            >
+              {source.title}
+            </p>
             <p
               className={`${plagiarisedColor(source.percentage)} font-semibold`}
             >{`${roundTwoDecimal(source.percentage * 100)}%`}</p>
