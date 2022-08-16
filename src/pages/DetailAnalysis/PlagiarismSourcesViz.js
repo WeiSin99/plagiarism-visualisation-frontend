@@ -18,6 +18,7 @@ const PlagiarismSourcesViz = ({ docType, plagReport, corpusNum }) => {
   const [corpus, setCorpus] = useState({});
 
   async function requestCorpus() {
+    if (!corpusNum) return;
     const res = await fetch(`http://127.0.0.1:8000/api/corpus/${corpusNum}`);
     const json = await res.json();
     setCorpus(json);
