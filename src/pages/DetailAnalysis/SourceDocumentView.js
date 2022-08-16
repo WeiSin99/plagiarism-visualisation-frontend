@@ -62,6 +62,13 @@ const SourceDocumentView = ({ docType, filenum, plagReport, caseNum }) => {
     }
   });
 
+  if (
+    !!Object.keys(plagReport).length &&
+    plagReport.detectedCases.length === 0
+  ) {
+    return <></>;
+  }
+
   return (
     <section id={`source-doc-${filenum}`} className="col-span-1 ">
       {!!Object.keys(doc).length ? (

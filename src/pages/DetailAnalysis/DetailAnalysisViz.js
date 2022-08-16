@@ -82,6 +82,13 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
     }
   }, [plagReport, width]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (
+    !!Object.keys(plagReport).length &&
+    plagReport.detectedCases.length === 0
+  ) {
+    return <></>;
+  }
+
   return (
     <>
       <div
