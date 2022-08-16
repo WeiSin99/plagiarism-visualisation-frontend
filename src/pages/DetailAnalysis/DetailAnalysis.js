@@ -29,7 +29,10 @@ const DetailAnalysis = () => {
 
   // set default source document to show
   useEffect(() => {
-    if (!!Object.keys(plagReport).length) {
+    if (
+      !!Object.keys(plagReport).length &&
+      plagReport.detectedCases.length > 0
+    ) {
       const selectedCase = plagReport.detectedCases[caseNum >= 0 ? caseNum : 0];
       const filenum = selectedCase.filenum;
 
@@ -51,7 +54,7 @@ const DetailAnalysis = () => {
               className={`${plagiarisedColor(
                 roundTwoDecimal(plagReport.plagiarismScore)
               )}`}
-            >{`${Math.round(plagReport.plagiarismScore * 100)}%`}</span>
+            >{`${Math.ceil(plagReport.plagiarismScore * 100)}%`}</span>
           </p>
           <DetailAnalysisViz plagReport={plagReport} setCaseNum={setCaseNum} />
           <CompareView

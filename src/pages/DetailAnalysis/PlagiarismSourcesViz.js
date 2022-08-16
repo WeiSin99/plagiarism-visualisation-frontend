@@ -50,6 +50,13 @@ const PlagiarismSourcesViz = ({ docType, plagReport, corpusNum }) => {
     setSelectedSource(sourceFilenum);
   };
 
+  if (
+    !!Object.keys(plagReport).length &&
+    plagReport.detectedCases.length === 0
+  ) {
+    return <></>;
+  }
+
   return (
     <div className="bg-gray-200 rounded-lg px-3 py-5">
       <p className="text-lg font-semibold mb-4">Plagiarism Sources</p>

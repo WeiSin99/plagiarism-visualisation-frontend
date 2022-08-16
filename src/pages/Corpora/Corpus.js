@@ -77,7 +77,7 @@ const Corpus = () => {
                       roundTwoDecimal(result.score)
                     )}`}
                   >
-                    {`${Math.round(result.score * 100)}%`}
+                    {`${Math.ceil(result.score * 100)}%`}
                   </TableData>
                   <TableData className="w-1/6">
                     <Link
