@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { plagiarisedPartBgColor } from '../../utils/utils';
 
 const SuspiciousDocumentView = ({
+  docType,
   filenum,
   plagReport,
   caseNum,
@@ -11,8 +12,9 @@ const SuspiciousDocumentView = ({
   const [paragraphs, setParagraphs] = useState([]);
 
   async function requestSusDoc() {
+    const requestType = docType === 'source' ? 'source' : 'suspicious';
     const res = await fetch(
-      `http://127.0.0.1:8000/api/suspicious-document/${filenum}`
+      `http://127.0.0.1:8000/api/${requestType}-document/${filenum}`
     );
     const json = await res.json();
     setDoc(json);

@@ -5,13 +5,18 @@ import CompareView from './CompareView';
 import PlagiarismSourcesViz from './PlagiarismSourcesViz';
 
 const DetailAnalysis = () => {
-  const { id: filenum } = useParams();
+  const { id: docId } = useParams();
   const [plagReport, setPlagReport] = useState({});
   const [caseNum, setCaseNum] = useState(0);
   const [sourceFilenum, setSourceFilenum] = useState(null);
 
+  const docType = docId[0] === 's' ? 'source' : 'suspicious';
+  const filenum = docId.slice(1);
+
   async function requestPlagReport() {
-    const res = await fetch(`http://127.0.0.1:8000/api/detail/${filenum}`);
+    const res = await fetch(
+      `http://127.0.0.1:8000/api/detail/${docType}/${filenum}`
+    );
     const json = await res.json();
     setPlagReport(json);
   }
@@ -40,6 +45,7 @@ const DetailAnalysis = () => {
           <p className="text-base mt-2 text-gray-600">{plagReport.authors}</p>
           <DetailAnalysisViz plagReport={plagReport} setCaseNum={setCaseNum} />
           <CompareView
+            docType={docType}
             susDoc={filenum}
             caseNum={caseNum}
             plagReport={plagReport}
