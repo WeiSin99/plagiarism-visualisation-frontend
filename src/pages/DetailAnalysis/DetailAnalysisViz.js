@@ -5,6 +5,7 @@ import { interpolateOrRd } from 'd3-scale-chromatic';
 import {
   forceSimulation,
   forceCollide,
+  forceLink,
   forceCenter,
   forceManyBody,
 } from 'd3-force';
@@ -15,6 +16,7 @@ const height = 500;
 
 const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
   const [animatedNodes, setAnimatedNodes] = useState([]);
+  const [animatedLinks, setAnimatedLinks] = useState([]);
   const [containerRef, width] = useResponsiveWidth();
 
   useEffect(() => {
@@ -27,7 +29,7 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
           .range([10, 250]);
       }
 
-      const allScores = plagReport.detectedCases.flatMap(c => {
+      const allScores = plagReport.detectedCases.map(c => {
         return c.averageScore;
       });
       const minScore = min(allScores);
@@ -42,8 +44,22 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
           color: colorScale(c.averageScore),
         };
       });
+      const links = plagReport.intersectedCases.map(intersectedCase => {
+        return {
+          source: intersectedCase.source,
+          target: intersectedCase.target,
+          color: '#000',
+          strokeWidth: 3,
+        };
+      });
 
       const simulation = forceSimulation(nodes)
+        .force(
+          'link',
+          forceLink(links)
+            .id(d => d.id)
+            .strength(0.5)
+        )
         .force('center', forceCenter(width / 2, height / 2))
         .force(
           'collide',
@@ -59,6 +75,7 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
 
       simulation.on('tick', () => {
         setAnimatedNodes([...simulation.nodes()]);
+        setAnimatedLinks([...links]);
       });
 
       return () => simulation.stop();
@@ -84,6 +101,18 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
               fill={node.color}
               data-id={node.id}
             ></circle>
+          ))}
+          {animatedLinks.map(link => (
+            <line
+              key={link.index}
+              stroke={link.color}
+              strokeWidth={link.strokeWidth}
+              opacity={0.5}
+              x1={link.source.x}
+              y1={link.source.y}
+              x2={link.target.x}
+              y2={link.target.y}
+            />
           ))}
         </svg>
       </div>
