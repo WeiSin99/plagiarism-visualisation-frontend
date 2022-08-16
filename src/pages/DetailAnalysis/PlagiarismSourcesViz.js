@@ -39,10 +39,11 @@ const PlagiarismSourcesViz = ({ docType, plagReport, corpusNum }) => {
       .map(plagCase => `circle[data-id='${plagCase}']`)
       .join(', ');
 
-    document.querySelectorAll('svg > circle').forEach(node => {
+    const daViz = document.getElementById('detailAnalysisViz');
+    daViz.querySelectorAll('circle').forEach(node => {
       node.setAttribute('stroke', null);
     });
-    document.querySelectorAll(fileCaseAttributes).forEach(node => {
+    daViz.querySelectorAll(fileCaseAttributes).forEach(node => {
       node.setAttribute('stroke', 'black');
       node.setAttribute('stroke-width', 2);
     });

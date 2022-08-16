@@ -67,7 +67,11 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
 
   return (
     <>
-      <div ref={containerRef} className="w-full col-span-1">
+      <div
+        id="detailAnalysisViz"
+        ref={containerRef}
+        className="w-full col-span-1"
+      >
         <svg width="100%" height={height}>
           {animatedNodes.map(node => (
             <circle
