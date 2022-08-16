@@ -52,7 +52,7 @@ const SuspiciousDocumentView = ({
   }, [doc, plagReport]);
 
   useEffect(() => {
-    if (paragraphs.length) {
+    if (paragraphs.length && caseNum >= 0) {
       const startSentence = plagReport.detectedCases[caseNum].thisStart;
       document
         .querySelector(`#suspicious-doc-${filenum} .sentence-${startSentence}`)

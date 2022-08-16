@@ -7,7 +7,7 @@ import PlagiarismSourcesViz from './PlagiarismSourcesViz';
 const DetailAnalysis = () => {
   const { id: docId } = useParams();
   const [plagReport, setPlagReport] = useState({});
-  const [caseNum, setCaseNum] = useState(0);
+  const [caseNum, setCaseNum] = useState(-1);
   const [sourceFilenum, setSourceFilenum] = useState(null);
 
   const docType = docId[0] === 's' ? 'source' : 'suspicious';
@@ -28,7 +28,7 @@ const DetailAnalysis = () => {
   // set default source document to show
   useEffect(() => {
     if (!!Object.keys(plagReport).length) {
-      const selectedCase = plagReport.detectedCases[caseNum];
+      const selectedCase = plagReport.detectedCases[caseNum >= 0 ? caseNum : 0];
       const filenum = selectedCase.filenum;
 
       setSourceFilenum(filenum);
