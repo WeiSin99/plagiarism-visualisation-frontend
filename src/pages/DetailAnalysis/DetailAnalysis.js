@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import DetailAnalysisViz from './DetailAnalysisViz';
 import CompareView from './CompareView';
 import PlagiarismSourcesViz from './PlagiarismSourcesViz';
+import { plagiarisedColor, roundTwoDecimal } from '../../utils/utils';
 
 const DetailAnalysis = () => {
   const { id: docId } = useParams();
@@ -43,7 +44,15 @@ const DetailAnalysis = () => {
           <h1 className="text-3xl font-semibold text-gray-900">
             {plagReport.title}
           </h1>
-          <p className="text-base mt-2 text-gray-600">{plagReport.authors}</p>
+          <p className="text-sm mt-1 text-gray-600">{plagReport.authors}</p>
+          <p className="text-lg font-semibold mt-2 text-black mb-3">
+            <span>Plagiarism Score: </span>
+            <span
+              className={`${plagiarisedColor(
+                roundTwoDecimal(plagReport.plagiarismScore)
+              )}`}
+            >{`${Math.round(plagReport.plagiarismScore * 100)}%`}</span>
+          </p>
           <DetailAnalysisViz plagReport={plagReport} setCaseNum={setCaseNum} />
           <CompareView
             docType={docType}

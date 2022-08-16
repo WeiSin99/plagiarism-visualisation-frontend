@@ -132,7 +132,7 @@ const CorpusViz = ({ report, filter }) => {
         {tooltipText}
       </div>
       <div ref={containerRef} className="w-full">
-        <svg width="100%" height={height}>
+        <svg id="corpusViz" width="100%" height={height}>
           {animatedNodes.map(node => (
             <circle
               className="cursor-pointer"
