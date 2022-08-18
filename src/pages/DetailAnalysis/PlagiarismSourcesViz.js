@@ -1,32 +1,42 @@
 import { useEffect, useState } from 'react';
 import { plagiarisedColor, roundTwoDecimal } from '../../utils/utils';
 
-// underline source if the source is in the same corpus
-const underlineSource = (corpus, docType, sourceFilenum) => {
-  if (Object.keys(corpus).length === 0) return;
-  const sourceType = docType === 'source' ? 'suspicious' : 'source';
-  const sourceInCorpus = corpus.response.find(doc => {
-    return doc.id === `${sourceType}-${sourceFilenum}`;
-  });
-
-  if (sourceInCorpus) return 'underline decoration-2';
-  else return '';
-};
-
 const PlagiarismSourcesViz = ({ docType, plagReport, corpusNum }) => {
   const [selectedSource, setSelectedSource] = useState(0);
-  const [corpus, setCorpus] = useState({});
+  const [corpus, setCorpus] = useState([]);
+  const [internalSources, setInternalSources] = useState([]);
+  const [externalSources, setExternalSources] = useState([]);
 
   async function requestCorpus() {
     if (!corpusNum) return;
     const res = await fetch(`http://127.0.0.1:8000/api/corpus/${corpusNum}`);
     const json = await res.json();
-    setCorpus(json);
+    setCorpus(json.response);
   }
 
   useEffect(() => {
     requestCorpus();
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!Object.keys(plagReport).length || !corpus.length) return;
+
+    const sourceType = docType === 'source' ? 'suspicious' : 'source';
+    const iSources = [];
+    const eSources = [];
+    plagReport.detectedSources.forEach(source => {
+      const sourceInCorpus = corpus.find(doc => {
+        return doc.id === `${sourceType}-${source.filenum}`;
+      });
+      if (sourceInCorpus) {
+        iSources.push(source);
+      } else {
+        eSources.push(source);
+      }
+    });
+    setInternalSources(iSources);
+    setExternalSources(eSources);
+  }, [corpus, plagReport, docType]);
 
   const clickHandler = sourceFilenum => {
     const allFileCases = [];
@@ -59,30 +69,43 @@ const PlagiarismSourcesViz = ({ docType, plagReport, corpusNum }) => {
 
   return (
     <div className="bg-gray-200 rounded-lg px-3 py-5">
-      <p className="text-lg font-semibold mb-4">Plagiarism Sources</p>
-      {!!Object.keys(plagReport).length &&
-        plagReport.detectedSources.map(source => (
-          <div
-            key={source.filenum}
-            className={`flex flex-row justify-between bg-white p-2 rounded-lg mt-3 cursor-pointer hover:scale-105 ${
-              selectedSource === source.filenum ? 'border-2 border-black' : ''
-            }`}
-            onClick={() => clickHandler(source.filenum)}
-          >
-            <p
-              className={`truncate mr-3 ${underlineSource(
-                corpus,
-                docType,
-                source.filenum
-              )}`}
-            >
-              {source.title}
-            </p>
-            <p
-              className={`${plagiarisedColor(source.percentage)} font-semibold`}
-            >{`${roundTwoDecimal(source.percentage * 100)}%`}</p>
-          </div>
-        ))}
+      <h2 className="text-lg font-semibold mb-4">Plagiarism Sources</h2>
+      {internalSources.length ? (
+        <h3 className="text-md font-semibold mb-3">
+          Sources from the same corpus
+        </h3>
+      ) : null}
+      {internalSources.map(source => (
+        <div
+          key={source.filenum}
+          className={`flex flex-row justify-between bg-white p-2 rounded-lg mt-3 cursor-pointer hover:scale-105 ${
+            selectedSource === source.filenum ? 'border-2 border-black' : ''
+          }`}
+          onClick={() => clickHandler(source.filenum)}
+        >
+          <p className={`truncate mr-3 `}>{source.title}</p>
+          <p
+            className={`${plagiarisedColor(source.percentage)} font-semibold`}
+          >{`${roundTwoDecimal(source.percentage * 100)}%`}</p>
+        </div>
+      ))}
+      {externalSources.length ? (
+        <h3 className="text-md font-semibold mt-3">External Sources</h3>
+      ) : null}
+      {externalSources.map(source => (
+        <div
+          key={source.filenum}
+          className={`flex flex-row justify-between bg-white p-2 rounded-lg mt-3 cursor-pointer hover:scale-105 ${
+            selectedSource === source.filenum ? 'border-2 border-black' : ''
+          }`}
+          onClick={() => clickHandler(source.filenum)}
+        >
+          <p className={`truncate mr-3 `}>{source.title}</p>
+          <p
+            className={`${plagiarisedColor(source.percentage)} font-semibold`}
+          >{`${roundTwoDecimal(source.percentage * 100)}%`}</p>
+        </div>
+      ))}
     </div>
   );
 };

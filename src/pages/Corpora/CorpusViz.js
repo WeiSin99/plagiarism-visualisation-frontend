@@ -11,14 +11,14 @@ import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 
 const height = 500;
 
-const forceGraph = (nodes, links, width, height, charge) => {
+const forceGraph = (nodes, links, width, height, charge, distance) => {
   return forceSimulation(nodes)
     .force(
       'link',
       forceLink(links)
         .id(d => d.id)
         .strength(1)
-        .distance(20)
+        .distance(distance)
     )
     .force('center', forceCenter(width / 2, height / 2).strength(1))
     .force(
@@ -75,12 +75,20 @@ const CorpusViz = ({ report, filter }) => {
       .flat();
 
     let strength = -6;
+    let distance = 20;
     if (filter !== 'All') {
       nodes = getLinkedNodes(nodes, links);
       strength = -15;
     }
 
-    const simulation = forceGraph(nodes, links, width, height, strength);
+    const simulation = forceGraph(
+      nodes,
+      links,
+      width,
+      height,
+      strength,
+      distance
+    );
     simulation.on('tick', () => {
       setAnimatedNodes([...simulation.nodes()]);
       setAnimatedLinks([...links]);
