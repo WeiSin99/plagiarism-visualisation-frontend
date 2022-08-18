@@ -81,7 +81,7 @@ const Corpus = () => {
                   </TableData>
                   <TableData className="w-1/6">
                     <Link
-                      className="inline-flex ml-3 items-center rounded-md bg-[#186FAF] px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-[#0F609B] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      className="inline-flex ml-3 items-center rounded-md bg-blue-500 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                       to={`/document/${
                         result.id.split('-')[0] === 'suspicious' ? 'u' : 's'
                       }${result.id.split('-')[1]}-${corpusNum}`}
