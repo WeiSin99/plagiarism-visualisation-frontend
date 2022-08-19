@@ -8,6 +8,7 @@ import {
 } from 'd3-force';
 
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
+import Tooltip from '../../components/Tooltip';
 
 const height = 500;
 
@@ -133,6 +134,28 @@ const CorpusViz = ({ report, filter }) => {
 
   return (
     <>
+      <Tooltip>
+        <ul className="list-disc list-inside">
+          <li>
+            Each <strong className="text-blue-600">circle</strong> represents a
+            document in the corpus.
+          </li>
+          <li className="mt-1">
+            Two <strong className="text-blue-600">linked circles</strong>{' '}
+            indicate that the two corresponding documents contain similar
+            (potentially plagiarised) parts.
+          </li>
+          <li className="mt-1">
+            Dropdown on the top left corner allows you to{' '}
+            <strong className="text-blue-600">filter</strong> to show only
+            linked document.
+          </li>
+          <li className="mt-1">
+            <strong className="text-blue-600">Clicking</strong> on a circle will
+            navigate you to the corresponding documents in the table below.
+          </li>
+        </ul>
+      </Tooltip>
       <div
         className="absolute bg-blue-200 text-center text-sm font-semibold rounded-lg p-2"
         style={tooltipStyle}

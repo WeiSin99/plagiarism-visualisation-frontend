@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { plagiarisedColor, roundTwoDecimal } from '../../utils/utils';
+import Tooltip from '../../components/Tooltip';
 
 const PlagiarismSourcesViz = ({ docType, plagReport, corpusNum }) => {
   const [selectedSource, setSelectedSource] = useState(0);
@@ -68,45 +69,56 @@ const PlagiarismSourcesViz = ({ docType, plagReport, corpusNum }) => {
   }
 
   return (
-    <div className="bg-gray-200 rounded-lg px-3 py-5">
-      <h2 className="text-lg font-semibold mb-4">Plagiarism Sources</h2>
-      {internalSources.length ? (
-        <h3 className="text-md font-semibold mb-3">
-          Sources from the same corpus
-        </h3>
-      ) : null}
-      {internalSources.map(source => (
-        <div
-          key={source.filenum}
-          className={`flex flex-row justify-between bg-white p-2 rounded-lg mt-3 cursor-pointer hover:scale-105 ${
-            selectedSource === source.filenum ? 'border-2 border-black' : ''
-          }`}
-          onClick={() => clickHandler(source.filenum)}
-        >
-          <p className={`truncate mr-3 `}>{source.title}</p>
-          <p
-            className={`${plagiarisedColor(source.percentage)} font-semibold`}
-          >{`${roundTwoDecimal(source.percentage * 100)}%`}</p>
-        </div>
-      ))}
-      {externalSources.length ? (
-        <h3 className="text-md font-semibold mt-3">External Sources</h3>
-      ) : null}
-      {externalSources.map(source => (
-        <div
-          key={source.filenum}
-          className={`flex flex-row justify-between bg-white p-2 rounded-lg mt-3 cursor-pointer hover:scale-105 ${
-            selectedSource === source.filenum ? 'border-2 border-black' : ''
-          }`}
-          onClick={() => clickHandler(source.filenum)}
-        >
-          <p className={`truncate mr-3 `}>{source.title}</p>
-          <p
-            className={`${plagiarisedColor(source.percentage)} font-semibold`}
-          >{`${roundTwoDecimal(source.percentage * 100)}%`}</p>
-        </div>
-      ))}
-    </div>
+    <>
+      <Tooltip>
+        <ul className="list-disc list-inside">
+          <li className="mt-1">
+            <strong className="text-blue-600">Clicking</strong> on one of the
+            sources will indicate the plagiarised parts that plagirise from this
+            source with a black outline.
+          </li>
+        </ul>
+      </Tooltip>
+      <div className="bg-gray-200 rounded-lg px-3 py-5">
+        <h2 className="text-lg font-semibold mb-4">Plagiarism Sources</h2>
+        {internalSources.length ? (
+          <h3 className="text-md font-semibold mb-3">
+            Sources from the same corpus
+          </h3>
+        ) : null}
+        {internalSources.map(source => (
+          <div
+            key={source.filenum}
+            className={`flex flex-row justify-between bg-white p-2 rounded-lg mt-3 cursor-pointer hover:scale-105 ${
+              selectedSource === source.filenum ? 'border-2 border-black' : ''
+            }`}
+            onClick={() => clickHandler(source.filenum)}
+          >
+            <p className={`truncate mr-3 `}>{source.title}</p>
+            <p
+              className={`${plagiarisedColor(source.percentage)} font-semibold`}
+            >{`${roundTwoDecimal(source.percentage * 100)}%`}</p>
+          </div>
+        ))}
+        {externalSources.length ? (
+          <h3 className="text-md font-semibold mt-3">External Sources</h3>
+        ) : null}
+        {externalSources.map(source => (
+          <div
+            key={source.filenum}
+            className={`flex flex-row justify-between bg-white p-2 rounded-lg mt-3 cursor-pointer hover:scale-105 ${
+              selectedSource === source.filenum ? 'border-2 border-black' : ''
+            }`}
+            onClick={() => clickHandler(source.filenum)}
+          >
+            <p className={`truncate mr-3 `}>{source.title}</p>
+            <p
+              className={`${plagiarisedColor(source.percentage)} font-semibold`}
+            >{`${roundTwoDecimal(source.percentage * 100)}%`}</p>
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

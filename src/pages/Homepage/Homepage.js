@@ -18,10 +18,18 @@ const Homepage = () => {
                 understanding it.
               </p>
               <p className="mt-2 text-xl text-gray-500">
-                It has been evaluated on the PAN-PC-11 dataset and ten corpora
-                (collection of documents) has been created from a subset of the
-                dataset to demonstrate this tool. Select one of the corpus from
-                the list below to get started.
+                It has been evaluated on the{' '}
+                <a
+                  className="text-blue-500 hover:text-blue-600"
+                  href="https://doi.org/10.5281/zenodo.3250095"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  PAN-PC-11
+                </a>{' '}
+                dataset and ten corpora (collection of documents) has been
+                created from a subset of the dataset to demonstrate this tool.
+                Select one of the corpus from the list below to get started.
               </p>
               <div className="mt-8">
                 {[...Array(10).keys()].map(num => (

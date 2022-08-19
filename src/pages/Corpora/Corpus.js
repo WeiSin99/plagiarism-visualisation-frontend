@@ -9,6 +9,7 @@ import TableHead from '../../components/table/TableHead';
 import TableHeader from '../../components/table/TableHeader';
 import TableBody from '../../components/table/TableBody';
 import TableData from '../../components/table/TableData';
+import Tooltip from '../../components/Tooltip';
 
 import Dropdown from '../../components/dropdown/Dropdown';
 import { plagiarisedColor, roundTwoDecimal } from '../../utils/utils';
@@ -48,6 +49,23 @@ const Corpus = () => {
       {!!Object.keys(report).length && (
         <>
           <CorpusViz report={report} filter={filter} />
+
+          <Tooltip>
+            <ul className="list-disc list-inside">
+              <li className="mt-1">
+                <strong className="text-blue-600">Clicking on the title</strong>{' '}
+                of a document will highlight the corresponding document in the
+                visualisation above.
+              </li>
+              <li className="mt-1">
+                <strong className="text-blue-600">
+                  Clicking on the investigate button
+                </strong>{' '}
+                will navigate you to the next view that allows you to
+                investigate the document further.
+              </li>
+            </ul>
+          </Tooltip>
           <Table>
             <TableHead>
               <TableRow>
