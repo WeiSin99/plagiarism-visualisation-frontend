@@ -10,6 +10,7 @@ import {
   forceManyBody,
 } from 'd3-force';
 
+import Tooltip from '../../components/Tooltip';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 
 const height = 500;
@@ -91,6 +92,30 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
 
   return (
     <>
+      <Tooltip>
+        <ul className="list-disc list-inside">
+          <li className="mt-1">Each circle represents a plagiarised part.</li>
+          <li className="mt-1">
+            <strong className="text-blue-600">Size</strong> of the circles
+            indicates the length of plagiarised parts,{' '}
+            <strong className="text-blue-600">intensity of red</strong> of the
+            circles indicates the similarity between the plagiarised parts and
+            their source.
+          </li>
+          <li className="mt-1">
+            Two <strong className="text-blue-600">linked circles</strong>{' '}
+            indicate that the two corresponding plagiarised parts contain{' '}
+            <strong className="text-blue-600">overlapped parts</strong>. For
+            example, a sentence in the suspicious document is similar to two
+            different sentences from two different documents.
+          </li>
+          <li className="mt-1">
+            <strong className="text-blue-600">Clicking</strong> on a circle will
+            select the plagiarised part as the "selected" plagiarised part, and
+            navigate you to that part of the document.
+          </li>
+        </ul>
+      </Tooltip>
       <div
         id="detailAnalysisViz"
         ref={containerRef}
