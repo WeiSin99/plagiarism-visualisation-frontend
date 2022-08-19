@@ -90,7 +90,13 @@ const SourceDocumentView = ({ docType, filenum, plagReport, caseNum }) => {
                     )}`,
                   }}
                 >
-                  {sentence.rawText.replace(/(?<!\n)\n(?!\n)/g, ' ')}{' '}
+                  {sentence.rawText
+                    .split(/\n\n/)
+                    .map((text, idx) =>
+                      idx === sentence.rawText.split(/\n\n/).length - 1
+                        ? text.replace(/\n/g, ' ')
+                        : text.replace(/\n/g, ' ') + '\n\n'
+                    )}{' '}
                 </span>
               ))}
             </p>
