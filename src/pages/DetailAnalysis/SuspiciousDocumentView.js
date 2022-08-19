@@ -14,7 +14,7 @@ const SuspiciousDocumentView = ({
   async function requestSusDoc() {
     const requestType = docType === 'source' ? 'source' : 'suspicious';
     const res = await fetch(
-      `http://127.0.0.1:8000/api/${requestType}-document/${filenum}`
+      `https://plagiarism-viz-backend.herokuapp.com/api/${requestType}-document/${filenum}`
     );
     const json = await res.json();
     setDoc(json);

@@ -24,7 +24,9 @@ const Corpus = () => {
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   async function requestCorpus() {
-    const res = await fetch(`http://127.0.0.1:8000/api/corpus/${corpusNum}`);
+    const res = await fetch(
+      `https://plagiarism-viz-backend.herokuapp.com/api/corpus/${corpusNum}`
+    );
     const json = await res.json();
     setReport(json);
   }
