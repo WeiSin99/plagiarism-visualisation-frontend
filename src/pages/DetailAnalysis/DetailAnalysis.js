@@ -17,7 +17,7 @@ const DetailAnalysis = () => {
 
   async function requestPlagReport() {
     const res = await fetch(
-      `http://127.0.0.1:8000/api/detail/${docType}/${filenum}`
+      `https://plagiarism-viz-backend.herokuapp.com/api/detail/${docType}/${filenum}`
     );
     const json = await res.json();
     setPlagReport(json);
