@@ -11,7 +11,7 @@ const Tooltip = ({ children, className }) => {
           className={`z-20 absolute border-[1px] bg-white border-black px-4 py-2 rounded flex items-center transition-all duration-150 w-80 ${
             tooltipActive ? '' : 'invisible'
           }`}
-          style={{ top: '25px', left: '-120px', opacity: 1 }}
+          style={{ top: '25px', left: '-300px', opacity: 1 }}
         >
           {/* <div
             className="border-[1px] border-black h-3 w-3 absolute bg-white z-10"
@@ -20,7 +20,7 @@ const Tooltip = ({ children, className }) => {
           {children}
         </div>
         <QuestionMarkCircleIcon
-          className="h-5 w-5"
+          className="h-6 w-6"
           onMouseEnter={() => setTooltipActive(true)}
           onMouseLeave={() => setTooltipActive(false)}
         />

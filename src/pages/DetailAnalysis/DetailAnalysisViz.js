@@ -96,11 +96,11 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
         <ul className="list-disc list-inside">
           <li className="mt-1">Each circle represents a plagiarised part.</li>
           <li className="mt-1">
-            <strong className="text-blue-600">Size</strong> of the circles
-            indicates the length of plagiarised parts,{' '}
+            <strong className="text-blue-600">The size</strong> of the circles
+            indicates the length of plagiarised parts, and the
             <strong className="text-blue-600">intensity of red</strong> of the
             circles indicates the similarity between the plagiarised parts and
-            their source.
+            their sources.
           </li>
           <li className="mt-1">
             Two <strong className="text-blue-600">linked circles</strong>{' '}
@@ -111,7 +111,7 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
           </li>
           <li className="mt-1">
             <strong className="text-blue-600">Clicking</strong> on a circle will
-            select the plagiarised part as the "selected" plagiarised part, and
+            select the plagiarised part as the "selected plagiarised part" and
             navigate you to that part of the document.
           </li>
         </ul>

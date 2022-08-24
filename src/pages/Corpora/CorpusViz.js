@@ -148,11 +148,11 @@ const CorpusViz = ({ report, filter }) => {
           <li className="mt-1">
             Dropdown on the top left corner allows you to{' '}
             <strong className="text-blue-600">filter</strong> to show only
-            linked document.
+            linked documents.
           </li>
           <li className="mt-1">
             <strong className="text-blue-600">Clicking</strong> on a circle will
-            navigate you to the corresponding documents in the table below.
+            navigate you to the corresponding document in the table below.
           </li>
         </ul>
       </Tooltip>

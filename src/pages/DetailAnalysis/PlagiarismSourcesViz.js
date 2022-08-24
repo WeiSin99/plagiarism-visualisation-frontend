@@ -76,8 +76,8 @@ const PlagiarismSourcesViz = ({ docType, plagReport, corpusNum }) => {
         <ul className="list-disc list-inside">
           <li className="mt-1">
             <strong className="text-blue-600">Clicking</strong> on one of the
-            sources will indicate the plagiarised parts that plagirise from this
-            source with a black outline.
+            sources will indicate the plagiarised parts that plagiarise from
+            this source with a black outline.
           </li>
         </ul>
       </Tooltip>

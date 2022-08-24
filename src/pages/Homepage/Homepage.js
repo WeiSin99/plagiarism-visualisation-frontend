@@ -15,7 +15,7 @@ const Homepage = () => {
                 process by using automatic plagiarism detection and introducing
                 several visualisation methods. Tooltips are provided at the top
                 right corner of each visualisation to help users better
-                understanding it.
+                understand it.
               </p>
               <p className="mt-2 text-xl text-gray-500">
                 It has been evaluated on the{' '}
@@ -27,9 +27,9 @@ const Homepage = () => {
                 >
                   PAN-PC-11
                 </a>{' '}
-                dataset and ten corpora (collection of documents) has been
+                dataset and ten corpora (collection of documents) have been
                 created from a subset of the dataset to demonstrate this tool.
-                Select one of the corpus from the list below to get started.
+                Select one of the corpora from the list below to get started.
               </p>
               <div className="mt-8">
                 {[...Array(10).keys()].map(num => (
