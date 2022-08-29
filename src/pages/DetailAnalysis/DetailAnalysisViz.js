@@ -22,13 +22,9 @@ const DetailAnalysisViz = ({ plagReport, setCaseNum }) => {
 
   useEffect(() => {
     if (!!Object.keys(plagReport).length) {
-      const radiusExtent = extent(plagReport.detectedCases, d => d.thisLength);
-      let radiusScale = scaleLinear().domain(radiusExtent).range([10, 100]);
-      if (plagReport.detectedCases.length === 1) {
-        radiusScale = scaleLinear()
-          .domain([0, plagReport.charLength])
-          .range([10, 250]);
-      }
+      let radiusScale = scaleLinear()
+        .domain([5, plagReport.charLength])
+        .range([10, 250]);
 
       const allScores = plagReport.detectedCases.map(c => {
         return c.averageScore;
