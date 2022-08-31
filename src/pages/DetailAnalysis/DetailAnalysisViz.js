@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { extent, min } from 'd3-array';
+import { min } from 'd3-array';
 import { scaleLinear, scaleSequential } from 'd3-scale';
 import { interpolateOrRd } from 'd3-scale-chromatic';
 import {
