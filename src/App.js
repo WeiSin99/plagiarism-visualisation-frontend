@@ -15,7 +15,13 @@ function App() {
         <Route path="source-retrieval/:id" element={<Document />} /> */}
         <Route
           path="/"
-          element={<div>Site brought down after project ended.</div>}
+          element={
+            <div className="flex h-full w-full text-center">
+              <h1 className="text-5xl font-semibold self-center w-full">
+                Site brought down after project ended.
+              </h1>
+            </div>
+          }
         />
       </Routes>
     </BrowserRouter>
