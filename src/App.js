@@ -9,10 +9,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        {/* <Route path="/" element={<Homepage />} />
         <Route path="corpus/:id" element={<Corpus />} />
         <Route path="document/:id" element={<DetailAnalysis />} />
-        <Route path="source-retrieval/:id" element={<Document />} />
+        <Route path="source-retrieval/:id" element={<Document />} /> */}
+        <Route
+          path="/"
+          element={<div>Site brought down after project ended.</div>}
+        />
       </Routes>
     </BrowserRouter>
   );
